@@ -1,0 +1,12 @@
+version: '2'
+services:
+  app:
+    build: .
+    ports:
+      - "80:80"
+      - "3000:3000"
+    volumes:
+      - type: bind
+        source: "./nginx/conf/nginx.conf"
+        target: "/etc/nginx/nginx.conf"
+      - /var/run/docker.sock:/tmp/docker.sock:ro

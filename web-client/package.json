@@ -1,0 +1,14 @@
+{
+  "name": "sample-monolithic-web-service-client",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "dev": "elm reactor",
+    "build": "elm make src/Main.elm --output=./dist/main.js"
+  },
+  "author": "ygoto3 <my.important.apes@gmail.com>",
+  "license": "MIT",
+  "dependencies": {
+  }
+}

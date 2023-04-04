@@ -1,0 +1,25 @@
+---
+
+- hosts: dev-server-ubuntu
+  user: dev
+  tasks:
+
+    - name: Install Rails
+      community.general.gem:
+        name: rails
+        version: 7.0.4.1
+        state: present
+
+    - name: Install Bundler
+      community.general.gem:
+        name: bundler
+        state: present
+
+    - name: Copy API server
+      block:
+
+      - name: Copy Nginx files
+        ansible.builtin.copy:
+          src: external-assets/sysroot/home/dev/api/
+          dest: /home/dev/api2
+

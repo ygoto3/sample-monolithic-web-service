@@ -1,0 +1,83 @@
+---
+
+- hosts: dev-server-ubuntu
+  user: root
+  tasks:
+
+    - name: Add the dev group/user
+      tags: user
+      block:
+
+        - name: Add the dev group
+          ansible.builtin.group:
+            name: developers
+            state: present
+
+        - name: Add the dev user
+          ansible.builtin.user:
+            name: dev
+            shell: /bin/bash
+            groups: developers
+            generate_ssh_key: yes
+            ssh_key_bits: 2048
+            ssh_key_file: .ssh/id_rsa
+            append: yes
+
+        - name: Authorize key for the dev user
+          ansible.builtin.copy:
+            src: /home/dev/.ssh/id_rsa.pub
+            dest: /home/dev/.ssh/authorized_keys 
+            remote_src: yes
+            owner: dev
+            group: dev
+            mode: '0600'
+
+    - name: Install apt packages
+      tags: packages
+      ansible.builtin.apt:
+        update_cache: yes
+        name:
+          - build-essential
+          - curl
+          - git
+          - tmux
+          - protobuf-compiler
+
+          # web-server
+          - nginx
+
+            # api
+          - ruby-full
+          - libsqlite3-dev
+
+    - name: Setup Nginx server
+      block:
+
+      - name: Configure Nginx server
+        ansible.builtin.copy:
+          src: external-assets/sysroot/etc/nginx/nginx.conf
+          dest: /etc/nginx/nginx.conf
+          owner: root
+          group: root
+          mode: '0644'
+
+      - name: Copy Nginx files
+        ansible.builtin.copy:
+          src: external-assets/sysroot/var/www/html/
+          dest: /var/www/html
+          owner: www-data
+          group: www-data
+
+      - name: Setup Nginx root
+        ansible.builtin.file:
+          path: /var/www/html
+          state: directory
+          owner: www-data
+          group: www-data
+          mode: '0755'
+
+    - name: Reload nginx
+      ansible.builtin.systemd:
+        name: nginx
+        state: reloaded
+

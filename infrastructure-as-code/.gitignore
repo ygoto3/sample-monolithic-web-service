@@ -1,0 +1,5 @@
+development/config.tfvars
+development/.terraform
+development/.terraform.lock.hcl
+development/terraform.tfstate
+development/terraform.tfstate*

@@ -1,0 +1,33 @@
+syntax = "proto3";
+
+option ruby_package = "Protos::";
+
+package sample_monolithic_web_service.api;
+
+message Item {
+  int32 id = 1;
+  string name = 2;
+}
+
+message IndexItemsRequest {
+}
+
+message IndexItemsResponse {
+  repeated Item item = 1;
+}
+
+message CreateItemRequest {
+  string name = 1;
+}
+
+message CreateItemResponse {
+  Item item = 1;
+}
+
+message DestroyItemRequest {
+}
+
+message DestroyItemResponse {
+  Item item = 1;
+}
+
